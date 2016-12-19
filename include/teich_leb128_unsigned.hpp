@@ -24,6 +24,24 @@
 
 namespace teich {
     namespace leb128 {
+        //!
+        //! \brief  Decodes unsigned LEB128 data into a bitter::VariableUnsignedInteger
+        //!
+        //! \tparam  T  the type the source pointer points to,
+        //!             should be inferred from the parameter,
+        //!             do not set this explicitly
+        //!
+        //! \param[in]  source  where to read from
+        //!
+        //! \returns  a bitter::VariableUnsignedInteger
+        //!           containing the decoded value
+        //!
+        //! \par Example
+        //! \code
+        //!     constexpr uint8_t buffer[] = { 0b11100101, 0b10001110, 0b00100110 };
+        //!     decodeUnsigned(buffer); // returns 624485
+        //! \endcode
+        //!
         template <typename T>
         bitter::VariableUnsignedInteger decodeUnsigned(const T* const source) {
             std::vector<uint8_t> buffer;
