@@ -1,3 +1,6 @@
 [submodule "test/dependencies/Catch"]
 	path = test/dependencies/Catch
 	url = https://github.com/philsquared/Catch.git
+[submodule "test/dependencies/libbitter"]
+	path = test/dependencies/libbitter
+	url = https://github.com/OMGtechy/libbitter.git
