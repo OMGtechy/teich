@@ -47,7 +47,7 @@ namespace teich {
         //! \endcode
         //!
         template <typename T>
-        bitter::VariableUnsignedInteger decodeUnsigned(const T* const source);
+        inline bitter::VariableUnsignedInteger decodeUnsigned(const T* const source);
     }
 }
 
@@ -56,7 +56,7 @@ namespace teich {
 ///
 
 template <typename T>
-bitter::VariableUnsignedInteger teich::leb128::decodeUnsigned(const T* const source) {
+inline bitter::VariableUnsignedInteger teich::leb128::decodeUnsigned(const T* const source) {
     std::vector<uint8_t> buffer;
     const auto* castSource = reinterpret_cast<const char*>(source);
 
