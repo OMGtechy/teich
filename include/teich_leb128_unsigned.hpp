@@ -22,6 +22,10 @@
 #include <bitter_read.hpp>
 #include <bitter_variable_unsigned_integer.hpp>
 
+///
+/// INTERFACE
+///
+
 namespace teich {
     namespace leb128 {
         //!
@@ -43,34 +47,41 @@ namespace teich {
         //! \endcode
         //!
         template <typename T>
-        bitter::VariableUnsignedInteger decodeUnsigned(const T* const source) {
-            std::vector<uint8_t> buffer;
-            const auto* castSource = reinterpret_cast<const char*>(source);
-
-            for(;;) {
-                auto currentByte = *castSource;
-                buffer.push_back(currentByte);
-
-                if(bitter::getBit(&currentByte, 7) == bitter::Bit::Zero) {
-                    // this was the last byte
-                    break;
-                }
-
-                castSource += 1;
-            }
-
-            bitter::VariableUnsignedInteger result(static_cast<size_t>(std::ceil(buffer.size() * 7.0) / 8.0f));
-            result = 0;
-
-            for(size_t i = buffer.size(); i > 0; --i) {
-                const auto bufferIndex = i - 1;
-                
-                result <<= 7;
-                result += buffer[bufferIndex] & 0x7F;
-            }
-
-            return result;
-        }
+        bitter::VariableUnsignedInteger decodeUnsigned(const T* const source);
     }
+}
+
+///
+/// IMPLEMENTATION
+///
+
+template <typename T>
+bitter::VariableUnsignedInteger teich::leb128::decodeUnsigned(const T* const source) {
+    std::vector<uint8_t> buffer;
+    const auto* castSource = reinterpret_cast<const char*>(source);
+
+    for(;;) {
+        auto currentByte = *castSource;
+        buffer.push_back(currentByte);
+
+        if(bitter::getBit(&currentByte, 7) == bitter::Bit::Zero) {
+            // this was the last byte
+            break;
+        }
+
+        castSource += 1;
+    }
+
+    bitter::VariableUnsignedInteger result(static_cast<size_t>(std::ceil(buffer.size() * 7.0) / 8.0f));
+    result = 0;
+
+    for(size_t i = buffer.size(); i > 0; --i) {
+        const auto bufferIndex = i - 1;
+
+        result <<= 7;
+        result += buffer[bufferIndex] & 0x7F;
+    }
+
+    return result;
 }
 
