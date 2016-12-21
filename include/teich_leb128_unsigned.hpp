@@ -17,7 +17,7 @@
 
 #pragma once
 
-#include <istream>
+#include <vector>
 
 #include <bitter_read.hpp>
 #include <bitter_variable_unsigned_integer.hpp>
@@ -48,6 +48,22 @@ namespace teich {
         //!
         template <typename T>
         inline bitter::VariableUnsignedInteger decodeUnsigned(const T* const source);
+
+        //!
+        //! \brief  Decodes unsigned LEB128 data into a bitter::VariableUnsignedInteger
+        //!
+        //! \param[in]  source  the value to encode in unsigned LEB128
+        //!
+        //! \returns  a collection of bytes containing the encoded data
+        //!
+        //! \par Example
+        //! \code
+        //!     // given a bitter::VariableUnsignedInteger called x
+        //!     x = 624485
+        //!     encodeUnsigned(value); // returns { 0b11100101, 0b10001110, 0b00100110 };
+        //! \endcode
+        //!
+        inline std::vector<uint8_t> encodeUnsigned(bitter::VariableUnsignedInteger source);
     }
 }
 
@@ -80,6 +96,32 @@ inline bitter::VariableUnsignedInteger teich::leb128::decodeUnsigned(const T* co
 
         result <<= 7;
         result += buffer[bufferIndex] & 0x7F;
+    }
+
+    return result;
+}
+
+inline std::vector<uint8_t> teich::leb128::encodeUnsigned(bitter::VariableUnsignedInteger source) {
+    if(source == 0) {
+        return { 0 };
+    }
+
+    std::vector<uint8_t> result;
+
+    for(;;) {
+        // TODO:
+        // add feature to libbitter to allow for faster extraction of individual bytes?
+        // it might speed this up; check
+        // TODO:
+        // allow bitwise operations with primitive integer types in libbitter?
+        result.push_back(source.toPrimitive<uint8_t>() & 0x7F);
+        source >>= 7;
+
+        if(source == 0) {
+            break;
+        } else {
+            bitter::setBit(&result.back(), 7, bitter::Bit::One);
+        }
     }
 
     return result;
