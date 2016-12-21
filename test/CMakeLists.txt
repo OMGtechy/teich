@@ -5,7 +5,7 @@ PROJECT(test_teich)
 ADD_EXECUTABLE(
     test_teich
     source/test_teich_main.cpp
-    source/test_teich_leb128_unsigned.cpp
+    source/test_teich_leb128_unsigned_decode.cpp
 )
 
 INCLUDE_DIRECTORIES(
