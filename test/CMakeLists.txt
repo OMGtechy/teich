@@ -32,7 +32,7 @@ IF(NOT WIN32)
     SET_PROPERTY(
         TARGET test_teich
         APPEND_STRING PROPERTY COMPILE_FLAGS
-        ""-Wall -Werror" -fsanitize=address --coverage"
+        " -Wall -Werror -fsanitize=address --coverage"
     )
 ENDIF()
 
