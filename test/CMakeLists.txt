@@ -16,21 +16,15 @@ INCLUDE_DIRECTORIES(
     ../include
 )
 
-# Add C++14 support
-TARGET_COMPILE_FEATURES(
-    test_teich
-    PRIVATE
-    cxx_relaxed_constexpr
-)
-
-SET_PROPERTY(
-    TARGET test_teich
-    APPEND_STRING PROPERTY COMPILE_FLAGS
-    "-Wall -Werror"
-)
-
 IF(NOT WIN32)
-    TARGET_LINK_LIBRARIES(
+    # Add C++14 support
+    TARGET_COMPILE_FEATURES(
+        test_teich
+        PRIVATE
+        cxx_relaxed_constexpr
+    )
+
+	TARGET_LINK_LIBRARIES(
         test_teich
         gcov asan
     )
@@ -38,7 +32,7 @@ IF(NOT WIN32)
     SET_PROPERTY(
         TARGET test_teich
         APPEND_STRING PROPERTY COMPILE_FLAGS
-        " -fsanitize=address --coverage"
+        ""-Wall -Werror" -fsanitize=address --coverage"
     )
 ENDIF()
 
